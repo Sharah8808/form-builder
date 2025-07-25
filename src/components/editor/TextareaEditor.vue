@@ -24,6 +24,10 @@
         <label class="block text-sm mb-1">Name</label>
         <input @input="update('name', element.name)" v-model="element.name" class="w-full border p-1 mb-4" />
 
+        <label class="block mb-1">Placeholder</label>
+        <input v-model="element.placeholder" @input="update('placeholder', element.placeholder)"
+            class="w-full border p-1 mb-4" />
+
         <label class="block mb-1">Classes</label>
         <input v-model="element.class" @input="update('class', element.class)" class="w-full border p-1 mb-4" />
     </div>
