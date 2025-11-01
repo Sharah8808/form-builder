@@ -27,6 +27,37 @@
             <input type="number" v-model.number="columnSizes[index]" @input="updateColumnSizes" min="1" max="12"
                 class="w-full border p-1" />
         </div>
+
+        <fieldset class="mb-4 p-2 border rounded">
+            <legend class="text-sm font-medium mb-2">Conditional Visibility</legend>
+            <label class="flex items-center gap-2 mb-2">Has visibility? 
+                <input type="checkbox" :checked="!!element.visibility" @change="e => {if (!e.target.checked) update('visibility', undefined); else update ('visibility', { showIf: {all : [ {field: '', op: '==', value: ''}]}, else: 'hide'}) }"/>
+            </label>
+
+            <div v-if="element.visibility?.showIf?.all" class="space-y-2">
+                <div v-for="(cond, i) in element.visibility.showIf.all" :key="i" class="flex gap-2 items-center">
+                    <input v-model="element.visibility.showIf.all[i].field" @input="update('visibility', element.visibility)" placeholder="field name" class="border p-1 w-1/3"/>
+                    <select v-model="element.visibility.showIf.all[i].op" @change="update('visibility', element.visibility)" class="border p-1">
+                        <option value="==">==</option>
+                        <option value="!=">!=</option>
+                        <option value=">">&gt;</option>
+                        <option value="<">&lt;</option>
+                        <option value=">=">&gt;=</option>
+                        <option value="<=">&lt;=</option>
+                    </select>
+                    <input v-model="element.visibility.showIf.all[i].value" @input="update('visibility', element.visibility)" placeholder="value" class="border p-1 w-1/3">
+                    <button type="button" @click="() => { element.visibility.showIf.all.splice(i,1); update('visibility', element.visibility)}" class="text-red-500">X</button>
+                </div>
+                <button type="button" @click="() => { element.visibility.showIf.all.push({ field: '', op: '==', value: '' }); update('visibility', element.visibility) }" class="text-blue-500">+ Add Condition</button>
+                <div class="mt-2">
+                    <label class="block text-sm">Else action</label>
+                    <select v-model="element.visibility.else" @change="update('visibility', element.visibility)" class="border p-1">
+                        <option value="show">Show</option>
+                        <option value="hide">Hide</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
     </div>
 
 </template>
@@ -74,8 +105,22 @@ function updateColumnSizes() {
 }
 
 function update(key, value) {
-    store.updateSelectedColumnFieldProperty(key, value)
+    // if a column-field is selected, update that nested field; otherwise update the selected element itself
+    if (store.selectedColumnFieldInfo) {
+        store.updateSelectedColumnFieldProperty(key, value)
+    } else {
+        // keep name-uniqueness guard like other editors
+        if (key === 'name') {
+            if (!store.isNameUnique(value, props.element.id)) {
+                props.element.name = ''
+                alert('Name must be unique!')
+                return
+            }
+        }
+        store.updateSelectedProperty(key, value)
+    }
 }
+    // ...existing code...
 
 const selectedColumnElement = computed(() => {
     if (!store.selectedElement || !store.selectedColumnFieldInfo) return null
