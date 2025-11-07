@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useBuilderStore = defineStore("builder", {
+export const  useBuilderStore = defineStore("builder", {
   state: () => ({
     elements: [],
     selectedElementId: null,

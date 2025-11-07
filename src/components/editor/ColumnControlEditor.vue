@@ -57,7 +57,18 @@
                     </select>
                 </div>
             </div>
+
+
         </fieldset>
+
+        <div class="mb-4 mt-4 p-2 border rounded">
+            <label class="flex items-center gap-2">
+            <input type="checkbox" :checked="element.compute" @change="e => update('compute', e.target.checked)"
+                class="checkbox" />
+            Compute
+        </label>
+
+        </div>
     </div>
 
 </template>
