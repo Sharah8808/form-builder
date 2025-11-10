@@ -16,8 +16,7 @@
             <small class="text-blue-500">name:[ {{ element.name }} ]</small>
             <small class="text-stone-900">{{ element.type }}</small>
             <small class="text-gray-700">classes:{ {{ element.class }} }</small>
-            <small :class="element.visibility ? 'text-green-500' : 'text-red-500'">{{ element.visibility ? 'has conditional visibility' : 'has no conditional visibility' }}</small>
-
+            <small v-if="element.visibility" class="text-green-500">show/hidden : true</small>
         </div>
     </div>
 
