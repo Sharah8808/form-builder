@@ -24,7 +24,7 @@
         </div>
 
         <label class="block mb-1">Label</label>
-        <input v-model="label" @input="update('label', label)" class="w-full border p-1 mb-4" />
+        <input v-model="element.label" @input="update('label', element.label)" class="w-full border p-1 mb-4" />
 
         <label class="block mb-1">Name</label>
         <input v-model="element.name" @input="update('name', element.name)" class="w-full border p-1 mb-4" />
